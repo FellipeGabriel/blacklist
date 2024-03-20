@@ -1,9 +1,17 @@
+function normalizeCpf(cpf) {
+    return cpf.replace(/\D/g, ''); 
+}
+
+function normalizeTelefone(telefone) {
+    return telefone.replace(/\D/g, ''); 
+}
+
 document.getElementById('searchForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const email = document.getElementById('email').value.trim();
-    const cpf = document.getElementById('cpf').value.trim();
-    const telefone = document.getElementById('telefone').value.trim();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const cpf = normalizeCpf(document.getElementById('cpf').value.trim());
+    const telefone = normalizeTelefone(document.getElementById('telefone').value.trim());
     const blacklist = [
         { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
         { email: "cliente2@gmail.com", cpf: "987.654.321-00", telefone: "(22) 88888-7777" },
@@ -17,9 +25,12 @@ document.getElementById('searchForm').addEventListener('submit', function(event)
 
     let found = false;
     for (const client of blacklist) {
-        if ((email && client.email.toLowerCase() === email.toLowerCase()) ||
-            (cpf && client.cpf === cpf) ||
-            (telefone && client.telefone === telefone)) {
+        const normalizedClientCpf = normalizeCpf(client.cpf);
+        const normalizedClientTelefone = normalizeTelefone(client.telefone);
+
+        if ((email && client.email.toLowerCase() === email) ||
+            (cpf && normalizedClientCpf === cpf) ||
+            (telefone && normalizedClientTelefone === telefone)) {
             found = true;
             displayResult(client);
             break;
@@ -67,5 +78,3 @@ function displayError(message) {
     const resultDiv = document.getElementById('result');
     resultDiv.innerHTML = `<p id="error-message">${message}</p>`;
 }
-
-
