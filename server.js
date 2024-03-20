@@ -14,9 +14,8 @@ const db = mysql.createConnection({
   database: 'caixa'
 });
 
-
 db.connect((err) => {
-    if (err) throw err;
+  if (err) throw err;
   console.log('Conectado ao banco de dados!');
 });
 
@@ -43,7 +42,6 @@ db.connect((err) => {
     //server: 'trc-dc-bd1', 
     //database: 'SRC',
 //}
-
 //sql.connect(config).then(pool => {
     //return pool.request()
       //.query('SELECT DISTINCT T.COD_PAUSA, O.NOME_RECUP, T.INICIO_PAUSA, T.FIM_PAUSA, F.SUPERVISOR, F.EMAIL_SUPERVISOR FROM TBL_SOLICITAPAUSA AS T INNER JOIN AUX_DADOS_OPERADORES_CEF AS O ON T.COD_RECUP = O.COD_RECUP INNER JOIN FUNCIONARIO_SUPERVISOR AS F ON O.NOME_RECUP = F.NOME WHERE T.COD_PAUSA IN (8, 9, 11) AND CAST(T.DATA_PAUSA AS DATE) = CAST(GETDATE() AS DATE) AND (DATEDIFF(MINUTE, T.INICIO_PAUSA, T.FIM_PAUSA) < 10 OR T.FIM_PAUSA IS NULL) AND T.INICIO_PAUSA BETWEEN DATEADD(MINUTE, -140, GETDATE()) AND DATEADD(MINUTE, -20, GETDATE())ORDER BY T.INICIO_PAUSA ASC')

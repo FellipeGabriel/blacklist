@@ -19,7 +19,7 @@ body {
     max-width: 1000px;
     margin: 100px auto;
     padding: 200px;
-    background-color: #53779b;
+    background-color: #741222;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     opacity: 0;
@@ -53,7 +53,7 @@ label {
     color: #ddd;
 }
 
-input {
+input{
     padding: 10px;
     margin-top: 5px;
     border: 1px solid #ced4da;
@@ -63,13 +63,15 @@ input {
     color: #ddd;
 }
 
+
+
 button {
     padding: 10px;
     margin-top: 20px;
     background-color: #36898f;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
     width: 100%;
     cursor: pointer;
     transition: background-color 0.5s ease;
@@ -131,11 +133,11 @@ body {
     max-width: 500px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #223b53;
+    background-color: #3f4b6b;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20 px rgba(0, 0, 0, 0.1);
     opacity: 0;
-    animation: slideIn 4s ease 2s forwards; 
+    animation: slideIn 4s ease 2s forwards;
 }
 
 @keyframes slideIn {
@@ -149,7 +151,7 @@ body {
     }
 }
 
-.splash {
+.splash{
     position: fixed;
     top: 0;
     left: 0;
@@ -159,7 +161,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #333;
-    animation: fadeOut 2s ease forwards;
+    animation: fadeOut 2 ease fowards;
 }
 
 .splash h1 {
@@ -184,14 +186,12 @@ body {
     font-size: 120px;
     margin-top: -30px; 
 }
-
 @keyframes fadeOut {
-    from {
-        opacity: 2;
+    from{
+        opacity:2;
     }
-    to {
-        opacity: 0;
-        visibility: hidden;
+    to{
+        opacity:0;
+        visibility:hidden;
     }
 }
-
