@@ -22,16 +22,25 @@
             <label for="cpf">CPF:</label>
             <input type="text" id="cpf" name="cpf" placeholder="CPF">
 
-            <label for="telefone">Telefone:</label>
+            <label for="telefone">Telefone (com DDD):</label>
             <input type="tel" id="telefone" name="telefone" placeholder="Telefone">
+            
+            <label for="dataInclusao">Data de Inclusão:</label>
+            <input type="date" id="dataInclusao" name="dataInclusao">
 
             <button type="submit">Buscar</button>
             <button type="button" id="showAll">Mostrar Todos</button>
         </form>
         <div id="result"></div>
+        <button type="button" id="firstPage">Primeira página</button>
+        <button type="button" id="prevPage">Página anterior</button>
+        <button type="button" id="nextPage">Próxima página</button>
+        <button type="button" id="lastPage">Última página</button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
 

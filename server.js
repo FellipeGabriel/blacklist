@@ -1,10 +1,13 @@
 const express = require('express');
 const mysql = require('mysql');
-const cors = require('cors');
+const cors = require('cors'); // Importe o módulo 'cors'
 const bodyParser = require('body-parser');
 
 const app = express();
-app.use(cors());
+
+// Configuração do CORS para permitir qualquer origem (não recomendado para produção)
+app.use(cors()); // Use o middleware 'cors'
+
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
@@ -19,34 +22,50 @@ db.connect((err) => {
   console.log('Conectado ao banco de dados!');
 });
 
-// Rota para buscar na blacklist
-//app.post('/buscar', (req, res) => {
- //   let sql = 'SELECT * FROM blacklist WHERE email = ? OR cpf = ? OR telefone = ?';
-   // let values = [req.body.email, req.body.cpf, req.body.telefone];
-    //db.query(sql, values, (err, results) => {
-      //  if (err) throw err;
-       // res.send(results);
-   // });
-//});
+const moment = require('moment'); 
 
-// Inicie o servidor
-//app.listen(3000, () => {
-  //  console.log('Servidor rodando na porta 3000');
-//});
+app.get('/blacklist/search', (req, res) => {
+  const email = req.query.email;
+  const cpf = req.query.cpf;
+  const telefone = req.query.telefone;
+  const dataInclusao = req.query.dataInclusao; 
 
-//const sql = require('mssql')
+  let query = 'SELECT CONCAT(a.ddd, a.telefone) as telefone, a.data_insercao FROM blacklist a WHERE 1=1';
+  if (email) query += ` AND a.email = '${email}'`;
+  if (cpf) query += ` AND a.cpf = '${cpf}'`;
+  if (telefone) query += ` AND CONCAT(a.ddd, a.telefone) = '${telefone}'`;
 
-//const config = {
-    //user: 'dduro',
-    //password: 'dd2014@)!$',
-    //server: 'trc-dc-bd1', 
-    //database: 'SRC',
-//}
-//sql.connect(config).then(pool => {
-    //return pool.request()
-      //.query('SELECT DISTINCT T.COD_PAUSA, O.NOME_RECUP, T.INICIO_PAUSA, T.FIM_PAUSA, F.SUPERVISOR, F.EMAIL_SUPERVISOR FROM TBL_SOLICITAPAUSA AS T INNER JOIN AUX_DADOS_OPERADORES_CEF AS O ON T.COD_RECUP = O.COD_RECUP INNER JOIN FUNCIONARIO_SUPERVISOR AS F ON O.NOME_RECUP = F.NOME WHERE T.COD_PAUSA IN (8, 9, 11) AND CAST(T.DATA_PAUSA AS DATE) = CAST(GETDATE() AS DATE) AND (DATEDIFF(MINUTE, T.INICIO_PAUSA, T.FIM_PAUSA) < 10 OR T.FIM_PAUSA IS NULL) AND T.INICIO_PAUSA BETWEEN DATEADD(MINUTE, -140, GETDATE()) AND DATEADD(MINUTE, -20, GETDATE())ORDER BY T.INICIO_PAUSA ASC')
-//}).then(result => {
-    //console.log(result)
-//}).catch(err => {
-    //console.error(err)
-//})
+  if (dataInclusao) {
+    const startOfDay = moment(dataInclusao).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    const endOfDay = moment(dataInclusao).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    query += ` AND a.data_insercao BETWEEN '${startOfDay}' AND '${endOfDay}'`;
+  }
+  
+  db.query(query, (err, result) => {
+    if (err) throw err;
+    res.json(result);
+  });
+});
+
+app.get('/blacklist', (req, res) => {
+  const page = req.query.page || 1;
+  const pageSize = 10;
+  const offset = (page - 1) * pageSize;
+
+  db.query('SELECT COUNT(*) as total FROM blacklist', (err, result) => {
+    if (err) throw err;
+
+    const total = result[0].total;
+    const totalPages = Math.ceil(total / pageSize);
+
+    const query = `SELECT CONCAT(a.ddd, a.telefone) as telefone, a.data_insercao FROM blacklist a LIMIT ${pageSize} OFFSET ${offset}`;
+    db.query(query, (err, result) => {
+      if (err) throw err;
+      res.json({clients: result, totalPages});
+    });
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Servidor rodando na porta 3000');
+});

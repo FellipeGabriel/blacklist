@@ -79,6 +79,7 @@ button {
     animation: slideIn 0.5s ease forwards;
 }
 
+
 button:hover {
     background-color: #134858;
 }
@@ -89,6 +90,7 @@ button:hover {
     margin-top: 20px;
     color: #ddd;
 }
+
 
 #error-message {
     color: #ff6b6b;
@@ -195,3 +197,33 @@ body {
         visibility:hidden;
     }
 }
+
+#prevPage, #nextPage, #firstPage, #lastPage {
+    display: none;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+
+table, th, td {
+    border: 1px solid #1f555c;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+table tr {
+    background-color: #5a7d95; 
+}
+
+/* Removendo a propriedade :hover que estava fazendo as linhas ficarem transparentes */
+/*
+table tr:hover {
+    background-color: #3f4b6b;
+}
+*/
+

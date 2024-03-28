@@ -1,106 +1,141 @@
+window.onload = function() {
+  setTimeout(function() {
+      document.getElementById('splash').style.display = 'none';
+  }, 2000);
+};
+
+let currentPage = 1;
+let totalPages = 1;
+
 function normalizeCpf(cpf){
-    return cpf.replace(/\D/g, '');
+  return cpf.replace(/\D/g, '');
 }
 
-function normalizeTelefone(telefone) {
-    return telefone.replace(/\D/g, '');
+function displayResult(clients){
+  const resultDiv = document.getElementById('result');
+  let html = '<p id="success-message">Clientes encontrados na Blacklist:</p>';
+  for (const client of clients) {
+    const formattedDate = moment(client.data_insercao).format('DD/MM/YYYY HH:mm:ss');
+    html += `
+    <table>
+        <tr><td>E-mail:</td><td>${client.email || 'Não informado'}</td></tr>
+        <tr><td>CPF:</td><td>${client.cpf || 'Não informado'}</td></tr>
+        <tr><td>Telefone:</td><td>${client.telefone}</td></tr>
+        <tr><td>Data de inclusão:</td><td>${formattedDate}</td></tr>
+        <tr><td>Data de expiração:</td><td>4000-12-31</td></tr>
+    </table>
+    `;
+  }
+  resultDiv.innerHTML = html;
 }
 
-document.getElementById('searchForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+function displayError(message){
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = `<p id="error-message">${message}</p>`;
+}
 
-    const email = document.getElementById('email').value.trim().toLowerCase();
-    const cpf = normalizeCpf(document.getElementById('cpf').value.trim());
-    const telefone = normalizeTelefone(document.getElementById('telefone').value.trim());
-    const blacklist = [
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente2@gmail.com", cpf: "987.654.321-00", telefone: "(22) 88888-7777" },
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente3@gmail.com", cpf: "997.654.321-00", telefone: "(22) 88988-7777" },
-        { email: "cliente4@gmail.com", cpf: "977.654.321-00", telefone: "(22) 84488-7777" },
-        { email: "cliente5@gmail.com", cpf: "987.654.321-00", telefone: "(22) 82288-7777" },
-        { email: "cliente6@gmail.com", cpf: "967.654.321-00", telefone: "(22) 88388-7777" },
-        { email: "cliente7@gmail.com", cpf: "957.654.321-00", telefone: "(22) 88886-7777" },
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente2@gmail.com", cpf: "987.654.321-00", telefone: "(22) 88888-7777" },
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente3@gmail.com", cpf: "997.654.321-00", telefone: "(22) 88988-7777" },
-        { email: "cliente4@gmail.com", cpf: "977.654.321-00", telefone: "(22) 84488-7777" },
-        { email: "cliente5@gmail.com", cpf: "987.654.321-00", telefone: "(22) 82288-7777" },
-        { email: "cliente6@gmail.com", cpf: "967.654.321-00", telefone: "(22) 88388-7777" },
-        { email: "cliente7@gmail.com", cpf: "957.654.321-00", telefone: "(22) 88886-7777" },
-    ];
-    
-    let found = false;
-    for (const client of blacklist) {
-        const normalizedClientCpf = normalizeCpf(client.cpf);
-        const normalizedClientTelefone = normalizeTelefone(client.telefone);
-
-        if ((email && client.email.toLowerCase() === email) ||
-            (cpf && normalizedClientCpf === cpf) ||
-            (telefone && normalizedClientTelefone === telefone)) {
-            found = true;
-            displayResult(client);
-            break;
-            
-        }
-    }
-    
-    
-    if (!found) {
-        displayError("Cliente não encontrado na Blacklist.");
-    }
-});
-
-document.getElementById('showAll').addEventListener('click', function() {
-    const blacklist = [
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente2@gmail.com", cpf: "987.654.321-00", telefone: "(22) 88888-7777" },
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente3@gmail.com", cpf: "997.654.321-00", telefone: "(22) 88988-7777" },
-        { email: "cliente4@gmail.com", cpf: "977.654.321-00", telefone: "(22) 84488-7777" },
-        { email: "cliente5@gmail.com", cpf: "987.654.321-00", telefone: "(22) 82288-7777" },
-        { email: "cliente6@gmail.com", cpf: "967.654.321-00", telefone: "(22) 88388-7777" },
-        { email: "cliente7@gmail.com", cpf: "957.654.321-00", telefone: "(22) 88886-7777" },
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente2@gmail.com", cpf: "987.654.321-00", telefone: "(22) 88888-7777" },
-        { email: "cliente1@gmail.com", cpf: "123.456.789-00", telefone: "(11) 99999-8888" },
-        { email: "cliente3@gmail.com", cpf: "997.654.321-00", telefone: "(22) 88988-7777" },
-        { email: "cliente4@gmail.com", cpf: "977.654.321-00", telefone: "(22) 84488-7777" },
-        { email: "cliente5@gmail.com", cpf: "987.654.321-00", telefone: "(22) 82288-7777" },
-        { email: "cliente6@gmail.com", cpf: "967.654.321-00", telefone: "(22) 88388-7777" },
-        { email: "cliente7@gmail.com", cpf: "957.654.321-00", telefone: "(22) 88886-7777" },
-    ];
+function fetchPage(page) {
+fetch(`http://localhost:3000/blacklist?page=${page}`)
+  .then(response => response.json())
+  .then(data => {
+    const blacklist = data.clients;
+    totalPages = data.totalPages;
 
     const resultDiv = document.getElementById('result');
-    let html = '<p id="success-message">Todos os clientes da Blacklist:</p>'
+    let html = '<p id="success-message">Clientes da Blacklist na página ' + page + ':</p>'
     for (const client of blacklist) {
-        html += `
-        <ul>
-            <li>E-mail: ${client.email}</li>
-            <li>CPF: ${client.cpf}</li>
-            <li>Telefone: ${client.telefone}</li>
-        </ul>
-        `;
+      html += `
+      <table>
+          <tr><td>E-mail:</td><td>${client.email || 'Não informado'}</td></tr>
+          <tr><td>CPF:</td><td>${client.cpf || 'Não informado'}</td></tr>
+          <tr><td>Telefone:</td><td>${client.telefone}</td></tr>
+          <tr><td>Data de inclusão:</td><td>${client.data_insercao}</td></tr>
+          <tr><td>Data de expiração:</td><td>4000-12-31</td></tr>
+      </table>
+      `;
     }
 
     resultDiv.innerHTML = html;
+
+  // Atualiza o estado dos botões de navegação
+    document.getElementById('prevPage').disabled = page <= 1;
+    document.getElementById('nextPage').disabled = page >= totalPages;
+    document.getElementById('firstPage').disabled = page <= 1;
+    document.getElementById('lastPage').disabled = page >= totalPages;
+  });
+}
+
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+event.preventDefault();
+
+const email = document.getElementById('email').value.trim().toLowerCase();
+const cpf = normalizeCpf(document.getElementById('cpf').value.trim());
+const telefone = document.getElementById('telefone').value.trim().replace(/\D/g, '');
+const selectedDate = document.getElementById('dataInclusao').value;
+
+
+let formattedDate = '';
+if (selectedDate) {
+  formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+}
+
+console.log(`Email: ${email}`);
+console.log(`CPF: ${cpf}`);
+console.log(`Telefone: ${telefone}`);
+console.log(`Data: ${formattedDate}`); // Se uma data for selecionada
+
+// Oculta os botões de navegação
+document.getElementById('prevPage').style.display = 'none';
+document.getElementById('nextPage').style.display = 'none';
+document.getElementById('firstPage').style.display = 'none';
+document.getElementById('lastPage').style.display = 'none';
+
+let url = `http://localhost:3000/blacklist/search?email=${email}&cpf=${cpf}&telefone=${telefone}`;
+if (selectedDate) {
+  url += `&dataInclusao=${formattedDate}`;
+}
+
+console.log(`URL: ${url}`);
+
+fetch(url)
+  .then(response => response.json())
+  .then(blacklist => {
+    if (blacklist.length > 0) {
+      displayResult(blacklist);
+    } else {
+      displayError("Cliente não encontrado na Blacklist.");
+    }
+  });
 });
 
-function displayResult(client){
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = `
-    <p id="success-message">Cliente encontrado na Blacklist:</p>
-    <ul>
-        <li>E-mail: ${client.email}</li>
-        <li>CPF: ${client.cpf}</li>
-        <li>Telefone: ${client.telefone}</li>
-    `
-}
+document.getElementById('showAll').addEventListener('click', function() {
+fetchPage(currentPage);
+document.getElementById('prevPage').style.display = 'inline';
+document.getElementById('nextPage').style.display = 'inline';
+document.getElementById('firstPage').style.display = 'inline';
+document.getElementById('lastPage').style.display = 'inline';
+});
 
-
-function displayError(message){
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = `<p id="error-message">${message}</p>;
-    `
+document.getElementById('nextPage').addEventListener('click', function() {
+if (currentPage < totalPages) {
+  currentPage++;
+  fetchPage(currentPage);
 }
+});
+
+document.getElementById('prevPage').addEventListener('click', function() {
+if (currentPage > 1) {
+  currentPage--;
+  fetchPage(currentPage);
+}
+});
+
+document.getElementById('firstPage').addEventListener('click', function() {
+currentPage = 1;
+fetchPage(currentPage);
+});
+
+document.getElementById('lastPage').addEventListener('click', function() {
+currentPage = totalPages;
+fetchPage(currentPage);
+});
